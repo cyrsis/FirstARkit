@@ -16,6 +16,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+
+        addcube()
+
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -35,7 +38,21 @@ class ViewController: UIViewController {
     }
 
     func addcube() {
-        let box = SCNBox()
+        let box = SCNBox(width: 0.1, height: 0.1, length:
+        0.1, chamferRadius: 0);
+
+        let boxnode = SCNNode()
+        boxnode.geometry = box
+        boxnode.position = SCNVector3(0,0,-0.6)
+
+
+        let scene = SCNScene()
+
+        scene.rootNode.addChildNode(boxnode)
+
+        sceneView.scene = scene //Add the custome scene to the SceneView
+
+
     }
 }
 
