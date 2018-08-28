@@ -29,6 +29,7 @@ class ViewController: UIViewController {
 
 
         addcube() //Add the cube in the load
+        addTapGuestureToSceneView()
 
     }
 
@@ -55,6 +56,18 @@ class ViewController: UIViewController {
         sceneView.scene = scene //Add the custome scene to the SceneView
 
 
+    }
+
+    func addTapGuestureToSceneView() {
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ViewController.didTap(withGestureRecognizer:)))
+
+        sceneView.addGestureRecognizer(tapGestureRecognizer)
+
+    }
+
+    @objc private func didTap(withGestureRecognizer rec: UIGestureRecognizer) {
+
+        print("We tapped it")
     }
 }
 
