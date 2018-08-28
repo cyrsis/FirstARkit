@@ -13,19 +13,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var sceneView: ARSCNView!
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-
-        addcube()
-
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        sceneView.session.pause();
-    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -37,13 +24,28 @@ class ViewController: UIViewController {
 
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+
+        addcube() //Add the cube in the load
+
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        sceneView.session.pause();
+    }
+
+
     func addcube() {
         let box = SCNBox(width: 0.1, height: 0.1, length:
         0.1, chamferRadius: 0);
 
         let boxnode = SCNNode()
         boxnode.geometry = box
-        boxnode.position = SCNVector3(0,0,-0.6)
+        boxnode.position = SCNVector3(0, 0, -0.6)
 
 
         let scene = SCNScene()
