@@ -14,18 +14,13 @@ class ViewController: UIViewController {
     @IBOutlet weak var sceneView: ARSCNView!
 
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         let config = ARWorldTrackingConfiguration();
 
         sceneView.session.run(config);
-
-
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
 
         addcube() //Add the cube in the load
@@ -40,18 +35,18 @@ class ViewController: UIViewController {
     }
 
 
-    func addcube() {
-        let box = SCNBox(width: 0.1, height: 0.1, length:
+    func addcube(x: Float = 0, y: Float = 0, z: Float = 0) {
+        let cube = SCNBox(width: 0.1, height: 0.1, length:
         0.1, chamferRadius: 0);
 
-        let boxnode = SCNNode()
-        boxnode.geometry = box
-        boxnode.position = SCNVector3(0, 0, -0.6)
+        let cubenode = SCNNode()
+        cubenode.geometry = cube
+        cubenode.position = SCNVector3(x, y, z)
 
 
         let scene = SCNScene()
 
-        scene.rootNode.addChildNode(boxnode)
+        scene.rootNode.addChildNode(cubenode)
 
         sceneView.scene = scene //Add the custome scene to the SceneView
 
@@ -65,9 +60,40 @@ class ViewController: UIViewController {
 
     }
 
-    @objc private func didTap(withGestureRecognizer rec: UIGestureRecognizer) {
+    @objc private func didTap(withGestureRecognizer recognizer: UIGestureRecognizer) {
+
+        let taplocation = recognizer.location(in: sceneView)
+        let hitTestResults = sceneView.hitTest(taplocation)
+
+        guard let node = hitTestResults.first?.node else { //Once hitted then
+
+            let hitTestResultsWithFeaturePoint = sceneView.hitTest(taplocation, types: .featurePoint)
+            //Ge the global points
+
+            if let hitTestResultWithFeaturePoints = hitTestResultsWithFeaturePoint.first {
+
+                let translation = hitTestResultWithFeaturePoints.worldTransform.translation
+                addcube(x: translation.x, y: translation.y, z: translation.z)
+
+            }
+
+            return
+        }
+
+        node.removeFromParentNode() //Remove the node from the parent node
+
 
         print("We tapped it")
+    }
+}
+
+extension float4x4 { // extension on the self float 4 x 4 Matrix
+
+    var translation: float3 {
+
+        let translation = self.columns.3
+
+        return float3(translation.x, translation.y, translation.z)
     }
 }
 
